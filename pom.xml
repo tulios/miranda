@@ -7,6 +7,10 @@
   <version>0.0.1-SNAPSHOT</version>
   <description>A java web MVC framework made with regard to study</description>
   
+  <build>
+		<finalName>miranda</finalName>
+  </build>
+  
   <repositories>
 	  <repository>
     	  <id>vidageek.net</id>
