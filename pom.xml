@@ -6,6 +6,14 @@
   <name>miranda</name>
   <version>0.0.1-SNAPSHOT</version>
   <description>A java web MVC framework made with regard to study</description>
+  
+  <repositories>
+	  <repository>
+    	  <id>vidageek.net</id>
+      	  <url>http://maven.vidageek.net/</url>
+  	  </repository>
+  </repositories>
+  
   <dependencies>
   
 	    <dependency>
