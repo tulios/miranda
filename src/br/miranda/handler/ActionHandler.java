@@ -6,15 +6,17 @@ import java.util.List;
 import net.vidageek.mirror.Mirror;
 import br.miranda.annotation.ActionMethod;
 import br.miranda.domain.ActionBean;
+import br.miranda.domain.enums.MethodType;
 import br.miranda.util.MirandaUtil;
 
 
 public class ActionHandler extends Handler {
 	private String[] actionPackages;
 	private String actionName;
-	
+
 	private Object action;
-	
+	private MethodType methodType;
+
 	public ActionHandler(String actionName, String[] actionPackages){
 		this.actionName = actionName;
 		this.actionPackages = actionPackages;
@@ -39,48 +41,41 @@ public class ActionHandler extends Handler {
 			}
 		}
 	}
-	
+
 	public String executeMethod(String method){
 		String returnValue = null;
-		
+
 		if (method != null){
-			
+
 		//main method of the action
 		}else{
-
+			ActionMethod actionMethod = Mirror.on(action.getClass()).
+			reflect().
+			annotation(ActionMethod.class).
+			atMethod(ActionBean.MAIN_METHOD).
+			withoutArgs();
+			
+			methodType = actionMethod.type();
+			
 			if (action instanceof ActionBean){
 				ActionBean actionBean = (ActionBean) action;
-				
-				ActionMethod actionMethod = Mirror.on(actionBean.getClass()).
-				reflect().
-				annotation(ActionMethod.class).
-				atMethod(ActionBean.MAIN_METHOD).
-				withoutArgs();
-				
-				switch(actionMethod.type()){
-					case CHAIN:
-						//TODO retorno terá "/" separando nome da action do nome do método caso seja em
-						//outra action, ex: bussinesAction/doSomething ou somente businessAction/ caso queira
-						//executar o método padrão, execute. Se não tiver "/" é por que é um método da mesma
-						//action.
-						break;
-						
-					default:
-						returnValue = actionBean.execute();
-				}
-				
+				returnValue = actionBean.execute();
+
 			}else{
 				returnValue = (String) Mirror.on(action).invoke().method(ActionBean.MAIN_METHOD).withoutArgs();
 			}
-			
+
 		}
 		return returnValue;
 	}
-	
+
 	public Object getAction() {
 		return action;
 	}
-	
+
+	public MethodType getMethodType(){
+		return methodType;
+	}
 }
 
 

@@ -21,12 +21,16 @@
 			<param-name>action-packages</param-name>
 			<param-value>br.miranda.action</param-value>
 		</init-param>
+		<init-param>
+			<param-name>extension</param-name>
+			<param-value>execute</param-value>
+		</init-param>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
 	
 	<servlet-mapping>
 		<servlet-name>miranda.frontController</servlet-name>
-		<url-pattern>/do/*</url-pattern>
+		<url-pattern>*.execute</url-pattern>
 	</servlet-mapping>
     
 </web-app>

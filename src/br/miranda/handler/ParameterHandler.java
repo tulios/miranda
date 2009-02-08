@@ -4,6 +4,7 @@ import java.lang.reflect.Field;
 import java.util.Map;
 
 import net.vidageek.mirror.Mirror;
+import br.miranda.domain.ActionBean;
 import br.miranda.util.MirandaUtil;
 
 public class ParameterHandler extends Handler {
@@ -22,7 +23,8 @@ public class ParameterHandler extends Handler {
 		for (String p: parameters.keySet()){
 			fillAttributes(action, p, p);
 		}
-		//TODO stop here!
+		
+		ActionBean.setParameters(parameters);
 	}
 	
 	private void fillAttributes(Object ref, String attribute, String originalAttribute){

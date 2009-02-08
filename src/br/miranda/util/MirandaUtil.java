@@ -1,8 +1,14 @@
 package br.miranda.util;
 
+import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import br.miranda.annotation.Action;
 
@@ -11,9 +17,17 @@ public class MirandaUtil {
 	public static String capitalizar(String s){		
 		return s.replaceFirst(String.valueOf(s.charAt(0)), (String.valueOf(s.charAt(0))).toUpperCase());
 	}
-
-	public static String[] splitUrl(String url){
+	
+	public static String prepareUrl(String url){
 		String[] parts = url.split("/");
+		if (parts != null && parts.length > 0){
+			return parts[parts.length - 1];
+		}
+		return null;
+	}
+	
+	public static String[] splitPath(String url){
+		String[] parts = url.split("!");
 
 		if (parts != null && parts.length > 0){
 			String[] aux = parts.clone();
@@ -38,6 +52,7 @@ public class MirandaUtil {
 		return false;
 	}
 	
+	@SuppressWarnings("unchecked")
 	public static Object getPrimitiveValues(Class clazz, String value){
 		
 		if (clazz.getName().equalsIgnoreCase("int")){
@@ -59,6 +74,15 @@ public class MirandaUtil {
 		}
 			
 		return value;
+	}
+	
+	public static void dispatch(String destination, HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
+		RequestDispatcher rd = req.getRequestDispatcher(destination);
+		rd.forward(req, resp);
+	}
+	
+	public static void redirect(String destination, HttpServletResponse resp) throws IOException{
+		resp.sendRedirect(destination);
 	}
 }
 
