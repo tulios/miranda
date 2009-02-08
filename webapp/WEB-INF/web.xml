@@ -5,13 +5,28 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
          xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
 	
-	<display-name>E-PLAMTAX</display-name>
+	<display-name>Miranda.Framework</display-name>
 	
-    <!-- Welcome file lists -->
+	<!-- Welcome file lists -->
     <welcome-file-list>
         <welcome-file>index.jsp</welcome-file>
-        <welcome-file>default.jsp</welcome-file>
-        <welcome-file>index.html</welcome-file>
     </welcome-file-list>
-
+    
+	<!-- Mapeamento miranda framework -->
+	<servlet>
+		<display-name>miranda</display-name>
+		<servlet-name>miranda.frontController</servlet-name>
+		<servlet-class>br.miranda.servlet.FrontController</servlet-class>
+		<init-param>
+			<param-name>action-packages</param-name>
+			<param-value>br.miranda.action</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	
+	<servlet-mapping>
+		<servlet-name>miranda.frontController</servlet-name>
+		<url-pattern>/do/*</url-pattern>
+	</servlet-mapping>
+    
 </web-app>

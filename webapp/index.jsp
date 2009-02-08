@@ -7,5 +7,14 @@
 </head>
 <body>
 	<h2>Olá projeto!</h2>
+	<form action="do/businessAction" method="post">
+		<input type="hidden" name="business.name" value="name_one">
+		<input type="hidden" name="business.value" value="15">
+		<input type="hidden" name="business.business.name" value="name_two">
+		<input type="hidden" name="business.business.value" value="40">
+		
+		<input type="submit" value="go!">
+	</form>
+	
 </body>
 </html>

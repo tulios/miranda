@@ -1,5 +1,7 @@
 package br.miranda.handler;
 
-public class Handler {
-
+public abstract class Handler {
+	
+	public abstract void execute();
+	
 }
