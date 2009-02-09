@@ -1,6 +1,9 @@
 package br.miranda.handler;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import net.vidageek.mirror.Mirror;
@@ -10,6 +13,7 @@ import br.miranda.util.MirandaUtil;
 public class ParameterHandler extends Handler {
 
 	private Map<String, String[]> parameters;
+	private Map<String, String[]> exportedParameters;
 	private Object action;
 
 	public ParameterHandler(Object action, Map<String, String[]> parameters){
@@ -60,8 +64,52 @@ public class ParameterHandler extends Handler {
 		}
 	}
 	
+	public void export(){ 
+		exportedParameters = new HashMap<String, String[]>();
+		
+		List<Method> methods = Mirror.on(action.getClass()).reflectAll().methods();
+		methods = MirandaUtil.getGetters(methods);
+		
+		for (Method m: methods){
+			Object value = Mirror.on(action).invoke().method(m.getName()).withoutArgs();
+			exportAttributes(m, null, value);
+		}
+				
+		setParameters(exportedParameters);
+	}
+	
+	private void exportAttributes(Method method, String name, Object value){
+		//if don't have a value
+		if (value == null){
+			return;
+		}
+		
+		//when we get the final value
+		if (MirandaUtil.isPrimitiveValue(method.getReturnType())){
+			name += "."+MirandaUtil.minimize(method.getName().replace("get", ""));
+			exportedParameters.put(name, new String[]{String.valueOf(value)});
+		
+		//object
+		}else{
+			//name composition
+			if (name == null){
+				name = MirandaUtil.minimize(method.getName().replace("get", ""));
+			}else{
+				name += "."+MirandaUtil.minimize(method.getName().replace("get", ""));
+			}
+			
+			//fill the other attributes
+			List<Method> methods = Mirror.on(method.getReturnType()).reflectAll().methods();
+			methods = MirandaUtil.getGetters(methods);
+			for (Method m: methods){
+				Object val = Mirror.on(value).invoke().method(m.getName()).withoutArgs();
+				exportAttributes(m, name, val);
+			}
+		}
+	}
+	
 	/**
-	 * Remount the attribute name, exemple:
+	 * Remount the attribute name, example:
 	 * 
 	 * 		[business, business, value] => business.business.value
 	 * 

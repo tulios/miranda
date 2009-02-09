@@ -15,7 +15,7 @@ public class BusinessAction extends ActionBean{
 	@ActionMethod(type = MethodType.DEFAULT)
 	public String execute() {
 		System.out.println("-> start to execute method of Business action! =]");
-		return "index.jsp";
+		return "result.jsp";
 	}
 
 	public Business getBusiness() {

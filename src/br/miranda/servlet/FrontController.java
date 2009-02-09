@@ -34,7 +34,6 @@ public class FrontController extends ServletMaster {
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)throws ServletException, IOException {
 		String url = req.getRequestURL().toString();
 		String path = MirandaUtil.prepareUrl(url);
-		System.out.println("Path: "+path);	   
 	    
 		//split up url
 	    String[] parts = MirandaUtil.splitPath(path);
@@ -62,13 +61,12 @@ public class FrontController extends ServletMaster {
     		parameterHandler.execute();
     		    		
     		String destination = actionHandler.executeMethod(methodName);
-    		
+    		//export parameters
+			parameterHandler.export();
+			MirandaUtil.includeParameters(req, parameterHandler.getParameters());
+			
     		switch(actionHandler.getMethodType()){
-				case CHAIN:
-					//TODO retorno terá "/" separando nome da action do nome do método caso seja em
-					//outra action, ex: bussinesAction/doSomething ou somente businessAction/ caso queira
-					//executar o método padrão, execute. Se não tiver "/" é por que é um método da mesma
-					//action.
+				case CHAIN:					
 					break;
 					
 				default:
